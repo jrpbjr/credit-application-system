@@ -1,6 +1,10 @@
 package br.com.jrpbjr.creditapplicationsystem.entity
 
-data class Address (
-    var zipCode: String = "",
-    var street: String = "",
+import jakarta.persistence.Column
+import jakarta.persistence.Embeddable
+
+@Embeddable
+data class Address(
+    @Column(nullable = false) var zipCode: String = "",
+    @Column(nullable = false) var street: String = ""
 )
