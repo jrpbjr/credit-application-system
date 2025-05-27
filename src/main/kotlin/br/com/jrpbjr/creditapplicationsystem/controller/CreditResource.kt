@@ -1,6 +1,7 @@
 package br.com.jrpbjr.creditapplicationsystem.controller
 
 import br.com.jrpbjr.creditapplicationsystem.dto.CreditDto
+import br.com.jrpbjr.creditapplicationsystem.dto.CreditView
 import br.com.jrpbjr.creditapplicationsystem.dto.CreditViewList
 import br.com.jrpbjr.creditapplicationsystem.entity.Credit
 import br.com.jrpbjr.creditapplicationsystem.service.impl.CreditService
@@ -8,11 +9,13 @@ import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.util.UUID
 import java.util.stream.Collectors
 
 @RestController
@@ -34,4 +37,10 @@ class CreditResource(
             .collect(Collectors.toList())
     }
 
+    @GetMapping
+    fun findByCreditCode(@RequestParam(value = "customerId") customerId: Long,
+                         @PathVariable creditCode: UUID) : CreditView {
+        val credit: Credit = this.creditService.findByCreditCode(customerId, creditCode)
+        return CreditView(credit)
+    }
 }
