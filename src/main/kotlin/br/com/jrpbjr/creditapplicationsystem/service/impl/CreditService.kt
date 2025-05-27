@@ -3,8 +3,10 @@ package br.com.jrpbjr.creditapplicationsystem.service.impl
 import br.com.jrpbjr.creditapplicationsystem.entity.Credit
 import br.com.jrpbjr.creditapplicationsystem.repository.CreditRepository
 import br.com.jrpbjr.creditapplicationsystem.service.ICreditService
+import org.springframework.stereotype.Service
 import java.util.*
 
+@Service
 class CreditService(
     private val creditRepository: CreditRepository,
     private val customerService: CustomerService
