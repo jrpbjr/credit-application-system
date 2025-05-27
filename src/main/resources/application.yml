@@ -7,9 +7,8 @@ spring:
     password: 1234
   jpa:
     show-sql: true
-    hibernate:
-      propeties:
-        hibernat.format_sql: true
+    properties:
+      hibernate.format_sql: true
   h2:
     console:
       enabled: true
@@ -17,3 +16,7 @@ spring:
       settings:
         trace: false
       web-allow-others: false
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql: TRACE
