@@ -25,22 +25,28 @@ class CreditResource(
 ) {
 
     @PostMapping
-    fun saveCredit(@RequestBody creditDto: CreditDto):String {
+    fun saveCredit(@RequestBody @Valid creditDto: CreditDto): ResponseEntity<String> {
         val credit: Credit = this.creditService.save(creditDto.toEntity())
-        return ("Credit ${credit.creditCode} - Customer ${credit.customer?.email} saved!")
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body("Credit ${credit.creditCode} - Customer ${credit.customer?.email} saved!")
     }
 
     @GetMapping
-    fun findAllByCustomerId(@RequestParam(value = "customerId") customerId: Long) : List<CreditViewList> {
-        return this.creditService.findAllByCustomer(customerId).stream()
+    fun findAllByCustomerId(@RequestParam(value = "customerId") customerId: Long):
+            ResponseEntity<List<CreditViewList>> {
+        val creditViewList: List<CreditViewList> = this.creditService.findAllByCustomer(customerId)
+            .stream()
             .map { credit: Credit -> CreditViewList(credit) }
             .collect(Collectors.toList())
+        return ResponseEntity.status(HttpStatus.OK).body(creditViewList)
     }
 
-    @GetMapping
-    fun findByCreditCode(@RequestParam(value = "customerId") customerId: Long,
-                         @PathVariable creditCode: UUID) : CreditView {
+    @GetMapping("/{creditCode}")
+    fun findByCreditCode(
+        @RequestParam(value = "customerId") customerId: Long,
+        @PathVariable creditCode: UUID
+    ): ResponseEntity<CreditView> {
         val credit: Credit = this.creditService.findByCreditCode(customerId, creditCode)
-        return CreditView(credit)
+        return ResponseEntity.status(HttpStatus.OK).body(CreditView(credit))
     }
 }
