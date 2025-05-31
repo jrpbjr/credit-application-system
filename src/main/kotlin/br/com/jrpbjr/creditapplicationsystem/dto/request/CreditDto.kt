@@ -1,8 +1,7 @@
-package br.com.jrpbjr.creditapplicationsystem.dto
+package br.com.jrpbjr.creditapplicationsystem.dto.request
 
 import br.com.jrpbjr.creditapplicationsystem.entity.Credit
 import br.com.jrpbjr.creditapplicationsystem.entity.Customer
-import br.com.jrpbjr.creditapplicationsystem.enummeration.Status
 import jakarta.validation.constraints.DecimalMax
 import jakarta.validation.constraints.DecimalMin
 import jakarta.validation.constraints.Digits

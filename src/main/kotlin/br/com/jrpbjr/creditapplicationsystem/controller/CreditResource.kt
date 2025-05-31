@@ -1,8 +1,8 @@
 package br.com.jrpbjr.creditapplicationsystem.controller
 
-import br.com.jrpbjr.creditapplicationsystem.dto.CreditDto
-import br.com.jrpbjr.creditapplicationsystem.dto.CreditView
-import br.com.jrpbjr.creditapplicationsystem.dto.CreditViewList
+import br.com.jrpbjr.creditapplicationsystem.dto.request.CreditDto
+import br.com.jrpbjr.creditapplicationsystem.dto.response.CreditView
+import br.com.jrpbjr.creditapplicationsystem.dto.response.CreditViewList
 import br.com.jrpbjr.creditapplicationsystem.entity.Credit
 import br.com.jrpbjr.creditapplicationsystem.service.impl.CreditService
 import jakarta.validation.Valid

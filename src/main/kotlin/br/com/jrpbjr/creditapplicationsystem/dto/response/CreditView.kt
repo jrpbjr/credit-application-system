@@ -1,11 +1,10 @@
-package br.com.jrpbjr.creditapplicationsystem.dto
+package br.com.jrpbjr.creditapplicationsystem.dto.response
 
 import br.com.jrpbjr.creditapplicationsystem.entity.Credit
 import br.com.jrpbjr.creditapplicationsystem.enummeration.Status
 import java.io.Serializable
 import java.math.BigDecimal
-import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 
 /**
  * DTO for {@link br.com.jrpbjr.creditapplicationsystem.entity.Credit}

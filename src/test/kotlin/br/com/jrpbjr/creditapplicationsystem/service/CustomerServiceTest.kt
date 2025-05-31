@@ -5,25 +5,18 @@ import br.com.jrpbjr.creditapplicationsystem.entity.Customer
 import br.com.jrpbjr.creditapplicationsystem.exception.BusinessException
 import br.com.jrpbjr.creditapplicationsystem.repository.CustomerRepository
 import br.com.jrpbjr.creditapplicationsystem.service.impl.CustomerService
-import io.mockk.MockKAnnotations
-import io.mockk.every
+import io.mockk.*
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
-import io.mockk.just
-import io.mockk.runs
-import io.mockk.verify
+import io.mockk.junit5.MockKExtension
 import org.assertj.core.api.Assertions
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.junit.jupiter.MockitoExtension
-import org.springframework.test.context.ActiveProfiles
 import java.math.BigDecimal
 import java.util.*
 
-import io.mockk.junit5.MockKExtension  // Adicione este import
-import org.junit.jupiter.api.BeforeEach // Adicione este import
-
-@ActiveProfiles("test")
+//@ActiveProfiles("test")
 @ExtendWith(MockKExtension::class)  // Troque MockitoExtension por MockKExtension
 class CustomerServiceTest {
     @MockK
