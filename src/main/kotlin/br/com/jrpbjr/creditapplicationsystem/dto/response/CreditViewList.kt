@@ -1,4 +1,4 @@
-package br.com.jrpbjr.creditapplicationsystem.dto
+package br.com.jrpbjr.creditapplicationsystem.dto.response
 
 import br.com.jrpbjr.creditapplicationsystem.entity.Credit
 import java.io.Serializable
