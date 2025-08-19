@@ -1,0 +1,414 @@
+openapi: 3.0.3
+info:
+  title: "Credit Application System API"
+  version: "1.0.0"
+  description: "API para gestão de clientes e créditos."
+  contact:
+    name: "Equipe Credit Application"
+    email: "contato@creditapp.local"
+  license:
+    name: "Apache 2.0"
+    url: "https://www.apache.org/licenses/LICENSE-2.0"
+servers:
+  - url: "http://localhost:8080"
+    description: "Ambiente local"
+tags:
+  - name: "Customers"
+    description: "Operações relacionadas a clientes"
+  - name: "Credits"
+    description: "Operações relacionadas a créditos"
+
+paths:
+  /api/customers:
+    post:
+      tags: ["Customers"]
+      summary: "Cria um cliente"
+      operationId: "saveCustomer"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CustomerDto"
+      responses:
+        "201":
+          description: "Cliente criado com sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerView"
+        "400":
+          description: "Dados inválidos"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: "Conflito de dados (ex.: CPF ou e-mail já existente)"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    patch:
+      tags: ["Customers"]
+      summary: "Atualiza dados de um cliente"
+      operationId: "updateCustomer"
+      parameters:
+        - name: "customerId"
+          in: "query"
+          required: true
+          description: "ID do cliente a ser atualizado"
+          schema:
+            type: "integer"
+            format: "int64"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CustomerUpdateDto"
+      responses:
+        "200":
+          description: "Cliente atualizado com sucesso"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerView"
+        "400":
+          description: "Dados inválidos"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: "Cliente não encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/customers/{id}:
+    get:
+      tags: ["Customers"]
+      summary: "Busca cliente por ID"
+      operationId: "findCustomerById"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          description: "ID do cliente"
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "Cliente encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerView"
+        "404":
+          description: "Cliente não encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      tags: ["Customers"]
+      summary: "Remove cliente por ID"
+      operationId: "deleteCustomer"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          description: "ID do cliente"
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "204":
+          description: "Cliente removido com sucesso"
+        "404":
+          description: "Cliente não encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/credits:
+    post:
+      tags: ["Credits"]
+      summary: "Cria uma solicitação de crédito"
+      operationId: "saveCredit"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreditDto"
+      responses:
+        "201":
+          description: "Crédito criado com sucesso"
+          content:
+            text/plain:
+              schema:
+                type: "string"
+                example: "Credit 123e4567-e89b-12d3-a456-426614174000 - Customer user@mail.com saved!"
+        "400":
+          description: "Dados inválidos"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: "Cliente não encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    get:
+      tags: ["Credits"]
+      summary: "Lista créditos por cliente"
+      operationId: "findAllCreditsByCustomerId"
+      parameters:
+        - name: "customerId"
+          in: "query"
+          required: true
+          description: "ID do cliente"
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "Lista retornada com sucesso"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/CreditViewList"
+        "404":
+          description: "Cliente não encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /api/credits/{creditCode}:
+    get:
+      tags: ["Credits"]
+      summary: "Busca crédito por código"
+      operationId: "findCreditByCode"
+      parameters:
+        - name: "creditCode"
+          in: "path"
+          required: true
+          description: "Código do crédito (UUID)"
+          schema:
+            type: "string"
+            format: "uuid"
+        - name: "customerId"
+          in: "query"
+          required: true
+          description: "ID do cliente"
+          schema:
+            type: "integer"
+            format: "int64"
+      responses:
+        "200":
+          description: "Crédito encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreditView"
+        "404":
+          description: "Crédito não encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    CustomerDto:
+      type: "object"
+      required: ["firstName", "lastName", "cpf", "income", "email", "password", "zipCode", "street"]
+      properties:
+        firstName:
+          type: "string"
+          example: "João"
+        lastName:
+          type: "string"
+          example: "Silva"
+        cpf:
+          type: "string"
+          description: "CPF do cliente"
+          example: "123.456.789-09"
+        income:
+          type: "number"
+          example: 3500.00
+          minimum: 0
+        email:
+          type: "string"
+          format: "email"
+          example: "joao.silva@email.com"
+        password:
+          type: "string"
+          format: "password"
+          example: "Secr3t!"
+        zipCode:
+          type: "string"
+          example: "01001-000"
+        street:
+          type: "string"
+          example: "Av. Paulista, 1000"
+
+    CustomerUpdateDto:
+      type: "object"
+      required: ["firstName", "lastName", "income", "zipCode", "street"]
+      properties:
+        firstName:
+          type: "string"
+          example: "João"
+        lastName:
+          type: "string"
+          example: "Silva"
+        income:
+          type: "number"
+          example: 4800.00
+          minimum: 0
+        zipCode:
+          type: "string"
+          example: "01310-100"
+        street:
+          type: "string"
+          example: "Rua Haddock Lobo, 200"
+
+    CustomerView:
+      type: "object"
+      properties:
+        firstName:
+          type: "string"
+          example: "João"
+        lastName:
+          type: "string"
+          example: "Silva"
+        cpf:
+          type: "string"
+          example: "123.456.789-09"
+        income:
+          type: "number"
+          example: 4800.00
+        email:
+          type: "string"
+          format: "email"
+          example: "joao.silva@email.com"
+        zipCode:
+          type: "string"
+          example: "01310-100"
+        street:
+          type: "string"
+          example: "Rua Haddock Lobo, 200"
+        id:
+          type: "integer"
+          format: "int64"
+          example: 1
+
+    CreditDto:
+      type: "object"
+      required: ["creditValue", "dayFirstInstallment", "numberOfInstallments", "customerId"]
+      properties:
+        creditValue:
+          type: "number"
+          example: 1500.00
+          minimum: 100.0
+          maximum: 1000000.0
+        dayFirstInstallment:
+          type: "string"
+          format: "date"
+          example: "2025-09-01"
+        numberOfInstallments:
+          type: "integer"
+          format: "int32"
+          example: 12
+          minimum: 1
+          maximum: 48
+        customerId:
+          type: "integer"
+          format: "int64"
+          example: 1
+
+    CreditView:
+      type: "object"
+      properties:
+        creditCode:
+          type: "string"
+          format: "uuid"
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        creditValue:
+          type: "number"
+          example: "1500.00"
+        numberOfInstallments:
+          type: "integer"
+          format: "int32"
+          example: 12
+        status:
+          $ref: "#/components/schemas/Status"
+        emailCustomer:
+          type: "string"
+          format: "email"
+          example: "cliente@empresa.com"
+        incomeCustomer:
+          type: "number"
+          example: 4800.00
+
+    CreditViewList:
+      type: "object"
+      properties:
+        creditCode:
+          type: "string"
+          format: "uuid"
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        creditValue:
+          type: "number"
+          example: "1500.00"
+        numberOfInstallments:
+          type: "integer"
+          format: "int32"
+          example: 12
+
+    Status:
+      type: "string"
+      enum: ["IN_PROGRESS", "APPROVED", "REJECT"]
+      example: "IN_PROGRESS"
+
+    Error:
+      type: "object"
+      properties:
+        timestamp:
+          type: "string"
+          format: "date-time"
+          x-java-type: "java.time.LocalDateTime"
+          x-kotlin-type: "java.time.LocalDateTime"
+          x-field-extra-annotation: "@com.fasterxml.jackson.annotation.JsonFormat(shape = com.fasterxml.jackson.annotation.JsonFormat.Shape.STRING, pattern = \"yyyy-MM-dd HH:mm:ss\")"
+          example: "2025-08-16 12:00:00"
+        status:
+          type: "integer"
+          format: "int32"
+          example: 400
+        error:
+          type: "string"
+          example: "Bad Request"
+        message:
+          type: "string"
+          example: "Dados inválidos"
+        path:
+          type: "string"
+          example: "/api/customers"
+        details:
+          type: "object"
+          additionalProperties:
+            type: "string"
+          example:
+            firstName: "O nome é obrigatório"
+            income: "A renda deve ser maior que zero"

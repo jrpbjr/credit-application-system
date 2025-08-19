@@ -1,6 +1,6 @@
 package br.com.jrpbjr.creditapplicationsystem.entity
 
-import br.com.jrpbjr.creditapplicationsystem.enummeration.Status
+import br.com.jrpbjr.creditapplicationsystem.generated.application.web.dto.Status
 import jakarta.persistence.*
 import java.math.BigDecimal
 import java.time.LocalDate
