@@ -16,6 +16,10 @@ spring:
       settings:
         trace: false
       web-allow-others: false
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    serialization:
+      write-dates-as-timestamps: false
 logging:
   level:
     org.hibernate.SQL: DEBUG
